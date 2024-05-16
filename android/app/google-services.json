@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "539777077394",
+    "project_id": "instagram-cdabc",
+    "storage_bucket": "instagram-cdabc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539777077394:android:65c459eeda141e2261d64b",
+        "android_client_info": {
+          "package_name": "com.example.instagram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMT9LCkkeMDQD-pBA7UxHyayY486u1Wdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539777077394:android:4677c49150c32f9561d64b",
+        "android_client_info": {
+          "package_name": "com.example.instagramclone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMT9LCkkeMDQD-pBA7UxHyayY486u1Wdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
