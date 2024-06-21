@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:instagramclone/models/user.dart' as model;
+import 'package:instagramclone/models/user.dart';
 import 'package:instagramclone/providers/user_provider.dart';
-import 'package:instagramclone/Resources/firestore_methods.dart';
+import 'package:instagramclone/resources/firestore_methods.dart';
 import 'package:instagramclone/screens/comments_screen.dart';
 import 'package:instagramclone/utils/color.dart';
 import 'package:instagramclone/utils/global_variable.dart';
@@ -11,8 +11,11 @@ import 'package:instagramclone/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../Models/user.dart';
+
 class PostCard extends StatefulWidget {
   final Map<String, dynamic> snap;
+
   const PostCard({
     Key? key,
     required this.snap,
@@ -39,11 +42,9 @@ class _PostCardState extends State<PostCard> {
           .doc(widget.snap['postId'])
           .collection('comments')
           .get();
-      if (mounted) {
-        setState(() {
-          commentLen = snap.docs.length;
-        });
-      }
+      setState(() {
+        commentLen = snap.docs.length;
+      });
     } catch (err) {
       showSnackBar(
         context,
@@ -55,6 +56,7 @@ class _PostCardState extends State<PostCard> {
   deletePost(String postId) async {
     try {
       await FireStoreMethods().deletePost(postId);
+      showSnackBar(context, 'Post deleted successfully');
     } catch (err) {
       showSnackBar(
         context,
@@ -65,7 +67,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final model.User user = Provider.of<UserProvider>(context).getUser;
+    final  user = Provider.of<UserProvider>(context).getUser;
     final width = MediaQuery.of(context).size.width;
 
     return Container(
@@ -127,26 +129,19 @@ class _PostCardState extends State<PostCard> {
                                 vertical: 16),
                             shrinkWrap: true,
                             children: [
-                              'Delete',
-                            ]
-                                .map(
-                                  (e) => InkWell(
+                              InkWell(
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16),
-                                  child: Text(e),
+                                      vertical: 12, horizontal: 16),
+                                  child: const Text('Delete'),
                                 ),
                                 onTap: () {
-                                  deletePost(
-                                    widget.snap['postId'].toString(),
-                                  );
-                                  // remove the dialog box
+                                  deletePost(widget.snap['postId']
+                                      .toString());
                                   Navigator.of(context).pop();
                                 },
                               ),
-                            )
-                                .toList(),
+                            ],
                           ),
                         );
                       },
@@ -228,7 +223,7 @@ class _PostCardState extends State<PostCard> {
               ),
               IconButton(
                 icon: const Icon(
-                  Icons.comment_outlined,
+                  Icons.comment,
                 ),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
@@ -240,7 +235,7 @@ class _PostCardState extends State<PostCard> {
               ),
               IconButton(
                 icon: const Icon(
-                  Icons.send,
+                  Icons.send_sharp,
                 ),
                 onPressed: () {},
               ),
@@ -248,11 +243,11 @@ class _PostCardState extends State<PostCard> {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(
-                    icon: const Icon(Icons.bookmark_border),
+                    icon: const Icon(Icons.bookmark_add_outlined),
                     onPressed: () {},
                   ),
                 ),
-              ),
+              )
             ],
           ),
           // DESCRIPTION AND NUMBER OF COMMENTS
@@ -316,8 +311,8 @@ class _PostCardState extends State<PostCard> {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    DateFormat.yMMMd().format(
-                        (widget.snap['datePublished'] as Timestamp).toDate()),
+                    DateFormat.yMMMd()
+                        .format(widget.snap['datePublished'].toDate()),
                     style: const TextStyle(
                       color: secondaryColor,
                     ),

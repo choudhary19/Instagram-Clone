@@ -1,17 +1,19 @@
-
 import 'package:flutter/material.dart';
 
 class TextFieldInput extends StatelessWidget {
   final TextEditingController textEditingController;
-  final bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  final bool isPass;
+  final IconData? icon; // Add this line
+
   const TextFieldInput({
     Key? key,
     required this.textEditingController,
-    this.isPass = false,
     required this.hintText,
     required this.textInputType,
+    this.isPass = false,
+    this.icon, // Add this line
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class TextFieldInput extends StatelessWidget {
         enabledBorder: inputBorder,
         filled: true,
         contentPadding: const EdgeInsets.all(8),
+        prefixIcon: icon != null ? Icon(icon) : null, // Add this line
       ),
       keyboardType: textInputType,
       obscureText: isPass,

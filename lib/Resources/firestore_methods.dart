@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagramclone/models/post.dart';
@@ -6,16 +5,19 @@ import 'package:instagramclone/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreMethods {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Instance of Firestore for database operations
 
+  // Method to upload a post to Firestore
   Future<String> uploadPost(String description, Uint8List file, String uid,
       String username, String profImage) async {
-    // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
-    String res = "Some error occurred";
+    // Get the uid from state management to avoid extra calls to FirebaseAuth
+    String res = "Some error occurred"; // Default error message
     try {
+      // Upload the image to Firebase Storage and get the download URL
       String photoUrl =
       await StorageMethods().uploadImageToStorage('posts', file, true);
-      String postId = const Uuid().v1(); // creates unique id based on time
+      String postId = const Uuid().v1(); // Create a unique ID for the post based on time
+      // Create a Post object
       Post post = Post(
         description: description,
         uid: uid,
@@ -26,44 +28,47 @@ class FireStoreMethods {
         postUrl: photoUrl,
         profImage: profImage,
       );
-      _firestore.collection('posts').doc(postId).set(post.toJson());
-      res = "success";
+      // Add the post to the 'posts' collection in Firestore
+      await _firestore.collection('posts').doc(postId).set(post.toJson());
+      res = "success"; // Update the result message to success
     } catch (err) {
-      res = err.toString();
+      res = err.toString(); // Update the result message to the error message
     }
-    return res;
+    return res; // Return the result message
   }
 
+  // Method to like or unlike a post
   Future<String> likePost(String postId, String uid, List likes) async {
-    String res = "Some error occurred";
+    String res = "Some error occurred"; // Default error message
     try {
       if (likes.contains(uid)) {
-        // if the likes list contains the user uid, we need to remove it
-        _firestore.collection('posts').doc(postId).update({
+        // If the user has already liked the post, remove the like
+        await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid])
         });
       } else {
-        // else we need to add uid to the likes array
-        _firestore.collection('posts').doc(postId).update({
+        // If the user has not liked the post, add the like
+        await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid])
         });
       }
-      res = 'success';
+      res = 'success'; // Update the result message to success
     } catch (err) {
-      res = err.toString();
+      res = err.toString(); // Update the result message to the error message
     }
-    return res;
+    return res; // Return the result message
   }
 
-  // Post comment
+  // Method to post a comment on a post
   Future<String> postComment(String postId, String text, String uid,
       String name, String profilePic) async {
-    String res = "Some error occurred";
+    String res = "Some error occurred"; // Default error message
     try {
       if (text.isNotEmpty) {
-        // if the likes list contains the user uid, we need to remove it
-        String commentId = const Uuid().v1();
-        _firestore
+        // If the comment text is not empty
+        String commentId = const Uuid().v1(); // Create a unique ID for the comment
+        // Add the comment to the 'comments' subcollection of the post
+        await _firestore
             .collection('posts')
             .doc(postId)
             .collection('comments')
@@ -76,35 +81,40 @@ class FireStoreMethods {
           'commentId': commentId,
           'datePublished': DateTime.now(),
         });
-        res = 'success';
+        res = 'success'; // Update the result message to success
       } else {
-        res = "Please enter text";
+        res = "Please enter text"; // Update the result message to prompt for text
       }
     } catch (err) {
-      res = err.toString();
+      res = err.toString(); // Update the result message to the error message
     }
-    return res;
+    return res; // Return the result message
   }
 
-  // Delete Post
+  // Method to delete a post
   Future<String> deletePost(String postId) async {
-    String res = "Some error occurred";
+    String res = "Some error occurred"; // Default error message
     try {
+      // Delete the post document from the 'posts' collection
       await _firestore.collection('posts').doc(postId).delete();
-      res = 'success';
+      res = 'success'; // Update the result message to success
     } catch (err) {
-      res = err.toString();
+      res = err.toString(); // Update the result message to the error message
     }
-    return res;
+    return res; // Return the result message
   }
 
+  // Method to follow or unfollow a user
   Future<void> followUser(String uid, String followId) async {
     try {
+      // Get the document snapshot of the current user
       DocumentSnapshot snap =
       await _firestore.collection('users').doc(uid).get();
+      // Get the list of users the current user is following
       List following = (snap.data()! as dynamic)['following'];
 
       if (following.contains(followId)) {
+        // If the current user is already following the target user, unfollow
         await _firestore.collection('users').doc(followId).update({
           'followers': FieldValue.arrayRemove([uid])
         });
@@ -113,6 +123,7 @@ class FireStoreMethods {
           'following': FieldValue.arrayRemove([followId])
         });
       } else {
+        // If the current user is not following the target user, follow
         await _firestore.collection('users').doc(followId).update({
           'followers': FieldValue.arrayUnion([uid])
         });
@@ -122,7 +133,7 @@ class FireStoreMethods {
         });
       }
     } catch (e) {
-      if (kDebugMode) print(e.toString());
+      if (kDebugMode) print(e.toString()); // Print the error message in debug mode
     }
   }
 }

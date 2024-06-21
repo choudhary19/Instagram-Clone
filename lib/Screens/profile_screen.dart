@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:instagramclone/resources/auth_methods.dart';
 import 'package:instagramclone/resources/firestore_methods.dart';
 import 'package:instagramclone/screens/login_screen.dart';
@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .doc(widget.uid)
           .get();
 
-      // get post length
+      // get post lENGTH
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
           .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -103,12 +103,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment:
                             MainAxisAlignment.spaceEvenly,
                             children: [
-                              buildStatColumn(postLen, "posts", fontSize: 14), // Adjusted font size
-                              buildStatColumn(followers, "followers", fontSize: 14), // Adjusted font size
-                              buildStatColumn(following, "following", fontSize: 14), // Adjusted font size
+                              buildStatColumn(postLen, "posts"),
+                              buildStatColumn(followers, "followers"),
+                              buildStatColumn(following, "following"),
                             ],
                           ),
-                          const SizedBox(height: 8), // Add spacing between stats and buttons
                           Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceEvenly,
@@ -218,16 +217,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
 
               return GridView.builder(
-                padding: const EdgeInsets.all(8), // Add padding around the grid
                 shrinkWrap: true,
                 itemCount: (snapshot.data! as dynamic).docs.length,
                 gridDelegate:
                 const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing:
-                  5, // Adjusted spacing
-                  mainAxisSpacing:
-                  5, // Adjusted spacing
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 1.5,
                   childAspectRatio: 1,
                 ),
                 itemBuilder: (context, index) {
@@ -249,15 +245,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Column buildStatColumn(int num, String label, {double fontSize = 16}) {
+  Column buildStatColumn(int num, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           num.toString(),
-          style: TextStyle(
-            fontSize: fontSize, // Adjusted font size
+          style: const TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -265,8 +261,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           margin: const EdgeInsets.only(top: 4),
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 12, // Adjusted font size
+            style: const TextStyle(
+              fontSize: 15,
               fontWeight: FontWeight.w400,
               color: Colors.grey,
             ),

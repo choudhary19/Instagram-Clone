@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:instagramclone/providers/user_provider.dart';
 import 'package:instagramclone/utils/global_variable.dart';

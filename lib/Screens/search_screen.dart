@@ -1,11 +1,8 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagramclone/screens/profile_screen.dart';
 import 'package:instagramclone/utils/color.dart';
-
-import '../utils/color.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -27,7 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: TextFormField(
             controller: searchController,
             decoration:
-            const InputDecoration(labelText: 'Search for a user...'),
+            const InputDecoration(labelText: 'Search User'),
             onFieldSubmitted: (String _) {
               setState(() {
                 isShowUsers = true;

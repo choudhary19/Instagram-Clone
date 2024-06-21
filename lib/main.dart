@@ -1,13 +1,12 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagramclone/providers/user_provider.dart';
-import 'package:instagramclone/Responsive/mobile_screen_layout.dart';
-import 'package:instagramclone/Responsive/Responsive_layout_screen.dart';
-import 'package:instagramclone/Responsive/web_screen_layout.dart';
-import 'package:instagramclone/Screens/login_screen.dart';
+import 'package:instagramclone/responsive/mobile_screen_layout.dart';
+import 'package:instagramclone/responsive/responsive_layout_screen.dart';
+import 'package:instagramclone/responsive/web_screen_layout.dart';
+import 'package:instagramclone/screens/login_screen.dart';
 import 'package:instagramclone/utils/color.dart';
 import 'package:provider/provider.dart';
 
